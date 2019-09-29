@@ -20,9 +20,6 @@ yarn start
 
 ## Endpoints
 
-This sample auth server exposes the following endpoint :
+`POST /render/url`
 
-`POST /hello`
-
-  * An authorization header must be present
-  * Result: Prints a welcome string
+`POST /render/html`
