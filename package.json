@@ -1,0 +1,26 @@
+{
+  "name": "pdf-render",
+  "version": "1.0.0",
+  "description": "Sample hello service",
+  "main": "index.js",
+  "author": "Patrick",
+  "license": "MIT",
+  "repository": "patrixr/pdf-render",
+  "scripts": {
+    "start": "DEBUG=* node bin/serve.js",
+    "lint": "eslint ./index.js ./lib/**/*.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "express-validator": "^6.2.0",
+    "generic-pool": "^3.7.1",
+    "lodash": "^4.17.15",
+    "puppeteer": "^1.20.0",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.1"
+  }
+}
