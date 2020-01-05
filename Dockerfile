@@ -7,11 +7,11 @@ WORKDIR /app
 COPY . /app
 
 
-FROM baseImage as testing
+# FROM baseImage as testing
 
-RUN yarn install
+# RUN yarn install
 
-RUN yarn test
+# RUN yarn test
 
 
 FROM baseImage as build
@@ -22,4 +22,4 @@ ENV PORT=8000
 
 EXPOSE 8000
 
-ENTRYPOINT ["npm","start"]
+ENTRYPOINT ["yarn","start"]
