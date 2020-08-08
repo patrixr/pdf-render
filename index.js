@@ -5,23 +5,32 @@ const validate    = require('./lib/validation');
 const Cache       = require('./lib/cache');
 const uuid        = require('uuid');
 const { defer }   = require('./lib/async');
+const cors        = require('cors');
+const processCSS  = require('inline-css');
 
 const app = express();
 
 const cache = new Cache();
 
-app.use(bodyParser.json());
+if (process.env.CORS === 'true') {
+  app.use(cors());
+}
 
+app.use(bodyParser.json());
 
 async function render(url, options) {
   const { promise, reject, resolve } = defer();
 
   const print = async (page) => {
     // Open the page
-    await page.goto(url, { waitUntil: 'networkidle0' });
+    await page.goto(url, { waitUntil: ['domcontentloaded', 'networkidle2'] })
     // Render the pdf
-    const pdf = await page.pdf({ format: 'A4', ...options });
-
+    const pdf = await page.pdf({
+      format: 'A4',
+      margin: { left: '1cm', top: '0.5cm', right: '1cm', bottom: '0.5cm' },
+      ...options
+    });
+    
     resolve(pdf);
   };
 
@@ -77,6 +86,8 @@ app.post('/render/url', validate('url'), async (req, res) => {
  * @apiParam  {String} html The html to render as pdf
  * @apiParam  {String} [filename] The pdf file name
  * @apiParam  {Object} [options] The rendering options
+ * @apiParam  {boolean} [options.inlineCSS]
+ * @apiParam  {string} [options.rootUrl]
  * @apiParam  {Number} [options.scale] Scale of the webpage rendering
  * @apiParam  {String} [options.format] The pdf page format e.g A4/A3/Letter...
  * @apiParam  {Object} [options.margin] Margins of the page, values labeled with units
@@ -90,12 +101,19 @@ app.post('/render/html', validate('html'), async (req, res) => {
   const {
     html,
     filename = 'render.pdf',
+    inlineCSS = false,
+    rootURL = '',
     options = {}
   } = req.body;
 
   const key = uuid();
 
-  cache.set(key, html);
+  if (inlineCSS && rootURL) {
+    let transformed = await processCSS(html, { url: rootURL });
+    cache.set(key, transformed);
+  } else {
+    cache.set(key, html);
+  }
 
   const port  = process.env.PORT || 8000;
   const url   = `http://localhost:${port}/preview/${key}`;

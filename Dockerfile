@@ -8,7 +8,7 @@ COPY . /app
 
 # Installs latest Chromium package
 RUN apk add --no-cache \
-      chromium=79.0.3945.88-r0 \
+      chromium=81.0.4044.113-r0 \
       nss \
       freetype \
       freetype-dev \
