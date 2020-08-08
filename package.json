@@ -18,7 +18,7 @@
     "express-validator": "^6.2.0",
     "generic-pool": "^3.7.1",
     "inline-css": "^2.6.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "puppeteer": "2.0.0",
     "uuid": "^3.3.3"
   },
